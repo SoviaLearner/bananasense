@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: bananasense-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.api:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: HF_REPO_ID
+        sync: false
+      - key: HF_MODEL_FILENAME
+        value: bananasense.keras
+      - key: HF_TOKEN
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false

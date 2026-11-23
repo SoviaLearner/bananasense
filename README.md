@@ -72,10 +72,14 @@ Next.js frontend (port 3000)
         │ upload / kamera
         ▼
 FastAPI backend (port 8000)
-        │ load model .keras
+        │ load model lokal atau Hugging Face
         ▼
 CNN BananaSense + metrics training
 ```
+
+Untuk deployment, simpan model dan metadata di Hugging Face Model Hub. Dataset train/test dapat disimpan di Hugging Face Dataset Hub. Backend FastAPI otomatis mengambil artifact dari Hugging Face jika folder `models/` tidak tersedia.
+
+Deploy backend menggunakan `render.yaml`, lalu isi `HF_REPO_ID`, `HF_TOKEN`, dan `FRONTEND_ORIGIN` di environment Render. Di Vercel, pilih folder `frontend` sebagai Root Directory dan isi `NEXT_PUBLIC_API_URL` dengan URL backend Render.
 
 ## Arti gradient descent
 
