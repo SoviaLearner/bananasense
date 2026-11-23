@@ -6,9 +6,11 @@
 flowchart TD
     A[Dataset gambar pisang] --> B{Pembagian dataset}
     B --> C[Data train]
-    B --> D[Data test]
+    C --> C1[80 persen train]
+    C --> C2[20 persen validation]
+    B --> D[Data test untuk evaluasi akhir]
 
-    C --> E[Resize 224 x 224]
+    C1 --> E[Resize 224 x 224]
     E --> F[Normalisasi pixel 0 sampai 1]
     F --> G[Augmentasi opsional]
     G --> H[Input ke CNN]
@@ -23,7 +25,7 @@ flowchart TD
     O --> P[Dense + Softmax]
     P --> Q[Prediksi 4 kelas]
 
-    Q --> R[Hitung loss dan accuracy]
+    Q --> R[Hitung loss dan accuracy validation]
     R --> S[Update bobot dengan Adam]
     S --> T{Epoch selesai?}
     T -- Tidak --> H
