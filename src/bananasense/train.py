@@ -45,6 +45,7 @@ def train_model(
     history = model.fit(train_ds, validation_data=validation_ds, epochs=epochs, callbacks=callbacks)
     history_data = {key: [float(value) for value in values] for key, values in history.history.items()}
     history_data["gradient_norm"] = tracker.gradient_norms
+    history_data["learning_rate"] = tracker.learning_rates
     HISTORY_PATH.parent.mkdir(parents=True, exist_ok=True)
     HISTORY_PATH.write_text(json.dumps(history_data, indent=2), encoding="utf-8")
     LABELS_PATH.write_text(json.dumps(CLASS_NAMES, indent=2), encoding="utf-8")

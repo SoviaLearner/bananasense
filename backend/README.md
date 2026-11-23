@@ -3,7 +3,7 @@
 Jalankan dari root project:
 
 ```powershell
-uvicorn backend.api:app --reload --port 8000
+uvicorn backend.api:app --reload --port 8017
 ```
 
 ## Hugging Face

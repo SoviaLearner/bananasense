@@ -16,7 +16,7 @@ import {
   Upload,
 } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8017";
 const defaultLabels = ["mentah", "setengah-matang", "matang", "terlalu-matang"];
 
 type MetricsResponse = {
@@ -81,7 +81,7 @@ export default function Home() {
   const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/metrics`).then((response) => response.json()).then(setMetrics).catch(() => setError("Backend belum aktif. Jalankan FastAPI di port 8000."));
+    fetch(`${API_URL}/api/metrics`).then((response) => response.json()).then(setMetrics).catch(() => setError("Backend belum aktif. Jalankan FastAPI di port 8017."));
     return () => streamRef.current?.getTracks().forEach((track) => track.stop());
   }, []);
 
@@ -184,7 +184,7 @@ export default function Home() {
       </section>
 
       <section className="section-block"><div className="section-heading"><div><span className="eyebrow">MODEL INSIGHTS</span><h2>Training intelligence</h2></div><span className="muted">Best epoch: {metrics?.metrics?.best_epoch || "—"}</span></div>
-        <div className="insight-grid"><div className="surface-card chart-card"><div className="card-heading"><div><h3>Learning curve</h3><span>Loss across training epochs</span></div><span className="chart-legend"><i /> Train <i className="yellow" /> Validation</span></div><LineChart values={history.loss || []} secondary={history.val_loss} color="#b6e33b" /></div><div className="surface-card chart-card"><div className="card-heading"><div><h3>Gradient descent</h3><span>Gradient norm by epoch</span></div><Activity size={18} color="#b6e33b" /></div><div className="formula">θₜ₊₁ = θₜ − η × ∇J(θₜ)</div><LineChart values={history.gradient_norm || []} color="#ffd21f" /></div></div>
+        <div className="insight-grid"><div className="surface-card chart-card"><div className="card-heading"><div><h3>Learning curve</h3><span>Loss across training epochs</span></div><span className="chart-legend"><i /> Train <i className="yellow" /> Validation</span></div><LineChart values={history.loss || []} secondary={history.val_loss} color="#b6e33b" /><div className="chart-caption">Training and validation loss should move down together.</div></div><div className="surface-card chart-card"><div className="card-heading"><div><h3>Gradient descent</h3><span>Gradient norm and learning rate</span></div><Activity size={18} color="#b6e33b" /></div><div className="formula">θₜ₊₁ = θₜ − η × ∇J(θₜ)</div><LineChart values={history.gradient_norm || []} color="#ffd21f" /><div className="descent-stats"><span>First gradient <b>{history.gradient_norm?.[0]?.toFixed(4) || "—"}</b></span><span>Final gradient <b>{history.gradient_norm?.at(-1)?.toFixed(4) || "—"}</b></span><span>Learning rate <b>{history.learning_rate?.at(-1)?.toExponential(2) || "—"}</b></span></div></div></div>
       </section>
 
       <footer><div className="brand"><div className="brand-mark small">🍌</div><span>BananaSense</span></div><span>Computer vision for better bananas.</span></footer>

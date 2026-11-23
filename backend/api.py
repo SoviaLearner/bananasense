@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
@@ -61,6 +62,7 @@ def resolve_artifact(local_path: Path, filename: str):
     )
 
 
+@lru_cache(maxsize=1)
 def get_model():
     model_path = resolve_artifact(MODEL_PATH, HF_MODEL_FILENAME)
     if model_path is None:

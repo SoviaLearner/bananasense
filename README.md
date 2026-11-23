@@ -36,10 +36,16 @@ Jalankan dari root `C:\Semester5-SDT\Banana Sense`:
 python -m src.bananasense.train --epochs 20 --batch-size 32
 ```
 
+Sebelum training, cek dataset:
+
+```powershell
+python scripts/check_dataset.py
+```
+
 Training akan menghasilkan:
 
 - `models/bananasense.keras`: model CNN
-- `models/training_history.json`: loss, accuracy, dan gradient norm setiap epoch
+- `models/training_history.json`: loss, accuracy, gradient norm, dan learning rate setiap epoch
 - `models/metrics.json`: akurasi, loss, dan classification report
 - `models/confusion_matrix.json`: confusion matrix data test
 - `models/class_names.json`: urutan label model
@@ -51,7 +57,7 @@ Sebanyak 20% citra dari `data/train/` otomatis digunakan sebagai validation sela
 Terminal 1 — backend CNN:
 
 ```powershell
-uvicorn backend.api:app --reload --port 8000
+uvicorn backend.api:app --reload --port 8017
 ```
 
 Terminal 2 — frontend:
@@ -71,7 +77,7 @@ Buka `http://localhost:3000`. Dashboard Next.js menerima gambar dari file atau k
 Next.js frontend (port 3000)
         │ upload / kamera
         ▼
-FastAPI backend (port 8000)
+FastAPI backend (port 8017)
         │ load model lokal atau Hugging Face
         ▼
 CNN BananaSense + metrics training
@@ -90,5 +96,16 @@ Model memperbarui bobot menggunakan rumus:
 ```
 
 `gradient_norm` dicatat setiap epoch supaya proses perubahan gradien dapat diamati di dashboard.
+
+## Cara melihat gradient descent
+
+1. Jalankan training sampai selesai dengan `python -m src.bananasense.train --epochs 30 --batch-size 32`.
+2. Pastikan `models/training_history.json` sudah terbentuk.
+3. Jalankan backend pada port unik `8017`.
+4. Jalankan frontend Next.js pada `http://localhost:3000`.
+5. Buka bagian **Training intelligence → Gradient descent** untuk melihat formula update bobot, gradient norm awal/akhir, dan learning rate terakhir.
+6. Buka bagian **Model snapshot** untuk melihat test accuracy dan best epoch.
+
+Nilai `best_epoch` adalah epoch dengan `val_accuracy` tertinggi. Model yang disimpan sudah memakai bobot terbaik karena training menggunakan early stopping dan `restore_best_weights=True`.
 
 Flowchart lengkap tersedia di `docs/flowchart-cnn.md`.
