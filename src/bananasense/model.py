@@ -27,7 +27,6 @@ def build_model(
     x = layers.Rescaling(1.0 / 255, name="normalization")(x)
     for filters in (16, 32, 64, 96):
         x = layers.Conv2D(filters, 3, padding="same", activation="relu")(x)
-        x = layers.BatchNormalization()(x)
         x = layers.MaxPooling2D()(x)
     x = layers.GlobalAveragePooling2D()(x)
     x = layers.Dropout(0.35)(x)

@@ -53,7 +53,7 @@ Training akan menghasilkan:
 - `models/confusion_matrix.json`: confusion matrix data test
 - `models/class_names.json`: urutan label model
 
-Sebanyak 20% citra dari `data/train/` otomatis digunakan sebagai validation selama training. Citra di `data/test/` hanya digunakan untuk evaluasi akhir agar hasil pengukuran tidak bocor.
+Sebanyak 20% citra dari `data/train/` digunakan sebagai validation dengan stratified split agar setiap kelas tetap terwakili. Citra di `data/test/` hanya digunakan untuk evaluasi akhir agar hasil pengukuran tidak bocor.
 
 ## Menjalankan dashboard Next.js
 
