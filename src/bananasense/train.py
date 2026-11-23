@@ -1,6 +1,10 @@
 import argparse
 import json
+import os
 from pathlib import Path
+
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "1")
 
 import tensorflow as tf
 
@@ -29,6 +33,8 @@ def train_model(
     epochs: int = EPOCHS,
     batch_size: int = BATCH_SIZE,
 ) -> dict:
+    tf.config.threading.set_intra_op_parallelism_threads(2)
+    tf.config.threading.set_inter_op_parallelism_threads(2)
     tf.keras.utils.set_random_seed(SEED)
     train_ds, validation_ds, test_ds = load_datasets(train_dir, test_dir, batch_size=batch_size)
     model = build_model(num_classes=len(CLASS_NAMES))

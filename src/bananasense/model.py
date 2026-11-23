@@ -1,10 +1,15 @@
+import os
+
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "1")
+
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 
 
 def build_model(
-    input_shape: tuple[int, int, int] = (224, 224, 3),
+    input_shape: tuple[int, int, int] = (160, 160, 3),
     num_classes: int = 4,
     learning_rate: float = 0.001,
 ) -> keras.Model:
@@ -20,7 +25,7 @@ def build_model(
     inputs = keras.Input(shape=input_shape, name="image")
     x = augmentation(inputs)
     x = layers.Rescaling(1.0 / 255, name="normalization")(x)
-    for filters in (32, 64, 128, 256):
+    for filters in (16, 32, 64, 96):
         x = layers.Conv2D(filters, 3, padding="same", activation="relu")(x)
         x = layers.BatchNormalization()(x)
         x = layers.MaxPooling2D()(x)

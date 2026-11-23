@@ -11,8 +11,8 @@ METRICS_PATH = MODEL_DIR / "metrics.json"
 LABELS_PATH = MODEL_DIR / "class_names.json"
 CONFUSION_MATRIX_PATH = MODEL_DIR / "confusion_matrix.json"
 
-IMAGE_SIZE = (224, 224)
-BATCH_SIZE = 32
+IMAGE_SIZE = (160, 160)
+BATCH_SIZE = 16
 EPOCHS = 20
 SEED = 42
 CLASS_NAMES = ["mentah", "setengah-matang", "matang", "terlalu-matang"]

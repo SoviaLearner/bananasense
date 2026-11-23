@@ -33,7 +33,10 @@ pip install -r requirements.txt
 Jalankan dari root `C:\Semester5-SDT\Banana Sense`:
 
 ```powershell
-python -m src.bananasense.train --epochs 20 --batch-size 32
+$env:TF_ENABLE_ONEDNN_OPTS = "0"
+$env:TF_NUM_INTRAOP_THREADS = "2"
+$env:TF_NUM_INTEROP_THREADS = "2"
+.venv\Scripts\python.exe -m src.bananasense.train --epochs 30 --batch-size 16
 ```
 
 Sebelum training, cek dataset:
