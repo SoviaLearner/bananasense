@@ -5,7 +5,8 @@ body { margin: 0; background: #0d110f; color: #f7f8f4; font-family: Arial, 'Sego
 button, input { font: inherit; }
 button { cursor: pointer; }
 .page-shell { width: min(1360px, calc(100% - 64px)); margin: 0 auto; padding: 26px 0 44px; }
-.topbar, .brand, .system-status, .section-heading, .section-heading > div, .live-pill, .input-tabs button, .primary-button, .result-heading, .confidence-row, .card-heading, .chart-legend, footer { display: flex; align-items: center; }
+.topbar, .brand, .system-status, .section-heading, .live-pill, .input-tabs button, .primary-button, .result-heading, .confidence-row, .card-heading, .chart-legend, footer { display: flex; align-items: center; }
+.section-heading > div { display: block; }
 .topbar { justify-content: space-between; margin-bottom: 34px; }
 .brand { gap: 12px; font-family: Arial, 'Segoe UI', sans-serif; font-size: 20px; font-weight: 700; }
 .brand-mark { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: #b6e33b; color: #1d2804; font-size: 25px; box-shadow: 0 8px 24px #b6e33b25; }
@@ -26,8 +27,8 @@ h1 em { color: #b6e33b; font-style: normal; }
 .circuit-two { bottom: -70px; right: 2%; width: 180px; height: 180px; }
 .section-block { margin-top: 38px; }
 .section-heading { justify-content: space-between; margin-bottom: 17px; }
-.section-heading h2 { font-size: 23px; letter-spacing: -.02em; }
-.muted { color: #9ba49d; font-size: 15px; }
+.section-heading h2 { font-size: 23px; line-height: 1.2; letter-spacing: -.02em; }
+.muted { color: #c0c9c0; font-size: 15px; }
 .live-pill { gap: 6px; padding: 8px 11px; border: 1px solid #35452a; border-radius: 999px; color: #b6e33b; background: #b6e33b12; font-size: 12px; }
 .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 13px; }
 .metric-card, .surface-card { border: 1px solid #2d372f; border-radius: 20px; background: #171c19; }
@@ -57,9 +58,9 @@ h1 em { color: #b6e33b; font-style: normal; }
 .error-message { margin-top: 12px; color: #ff9b8f; font-size: 12px; }
 .result-card { background: linear-gradient(145deg, #171c19, #1b251a); }
 .result-heading { justify-content: space-between; margin-bottom: 22px; }
-.result-heading h3, .card-heading h3 { font-size: 18px; }
+.result-heading h3, .card-heading h3 { font-size: 18px; line-height: 1.2; }
 .result-highlight { padding: 22px; border: 1px solid #536d32; border-radius: 17px; background: linear-gradient(135deg, #293a20, #182319); }
-.result-highlight span, .card-heading span { color: #9ba49d; font-size: 12px; }
+.result-highlight span, .card-heading span { color: #c0c9c0; font-size: 12px; }
 .result-highlight strong { display: block; margin: 8px 0 18px; color: #b6e33b; font-family: Arial, 'Segoe UI', sans-serif; font-size: 27px; }
 .confidence-row { justify-content: space-between; color: #cdd9c7; font-size: 13px; }
 .confidence-row b { color: #ffd21f; font-size: 16px; }
@@ -74,15 +75,18 @@ h1 em { color: #b6e33b; font-style: normal; }
 .chart-card { min-height: 270px; }
 .card-heading { justify-content: space-between; margin-bottom: 20px; }
 .card-heading h3 { margin-bottom: 5px; }
-.chart-legend { gap: 7px; color: #9ba49d; font-size: 11px; }
+.chart-legend { gap: 7px; color: #d0d8ce; font-size: 12px; }
 .chart-legend i { width: 8px; height: 8px; border-radius: 50%; background: #b6e33b; }
 .chart-legend i.yellow { margin-left: 6px; background: #ffd21f; }
 .formula { margin-bottom: 18px; padding: 14px; border: 1px solid #465431; border-radius: 12px; background: #202b1d; color: #b6e33b; text-align: center; font-family: 'Times New Roman', Cambria, serif; font-size: 23px; }
 .formula sub { font-size: .65em; vertical-align: -0.35em; }
 .line-chart { width: 100%; height: 160px; overflow: visible; }
-.chart-grid { stroke: #2d372f; stroke-width: 1; }
-.empty-chart { display: grid; place-items: center; height: 160px; color: #9ba49d; font-size: 13px; }
-.chart-caption { color: #768078; font-size: 11px; }
+.chart-grid { stroke: #405044; stroke-width: 1; }
+.chart-axis { stroke: #829681; stroke-width: 1.5; }
+.chart-axis-label { fill: #d0d8ce; font-size: 11px; }
+.chart-axis-title { fill: #f0f4ed; font-size: 12px; font-weight: 700; }
+.empty-chart { display: grid; place-items: center; height: 160px; color: #c0c9c0; font-size: 13px; }
+.chart-caption { color: #b5c0b5; font-size: 12px; line-height: 1.45; }
 .descent-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; color: #9ba49d; font-size: 10px; }
 .descent-stats span { padding: 9px; border-radius: 9px; background: #202721; }
 .descent-stats b { display: block; margin-top: 4px; color: #b6e33b; font-size: 12px; }
