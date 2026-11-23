@@ -149,16 +149,15 @@ export default function Home() {
     <main className="page-shell">
       <nav className="topbar">
         <div className="brand"><div className="brand-mark">🍌</div><span>BananaSense</span></div>
-        <div className="system-status"><span className="online-dot" /> SISTEM AKTIF</div>
       </nav>
 
       <section className="hero-card">
-        <div className="hero-copy"><span className="eyebrow">BANANASENSE</span><h1>Cek kematangan<br /><em>pisangmu.</em></h1><p>Unggah foto atau gunakan kamera untuk mendapatkan hasil klasifikasi kematangan pisang.</p></div>
+        <div className="hero-copy"><span className="eyebrow">BANANASENSE</span><h1>Klasifikasi<br /><em>kematangan pisang.</em></h1><p>Unggah foto atau gunakan kamera untuk melihat tingkat kematangan pisang.</p></div>
         <div className="hero-banana">🍌</div>
         <div className="circuit circuit-one" /><div className="circuit circuit-two" />
       </section>
 
-      <section className="section-block"><div className="section-heading"><div><span className="eyebrow">RINGKASAN</span><h2>Ringkasan model</h2></div><span className="live-pill"><Activity size={14} /> Data terbaru</span></div>
+      <section className="section-block"><div className="section-heading"><div><span className="eyebrow">RINGKASAN</span><h2>Ringkasan</h2></div></div>
         <div className="metric-grid">
           <MetricCard icon={<Database size={19} />} label="Gambar training" value={metrics ? String(Object.values(metrics.train_counts).reduce((sum, value) => sum + value, 0)) : "—"} accent="#b6e33b" />
           <MetricCard icon={<Target size={19} />} label="Akurasi test" value={accuracy == null ? "—" : `${(accuracy * 100).toFixed(1)}%`} accent="#ffd21f" />
@@ -171,7 +170,7 @@ export default function Home() {
         <div className="scanner-grid">
           <div className="surface-card scan-card">
             <div className="input-tabs"><button className={mode === "upload" ? "active" : ""} onClick={() => { setMode("upload"); setCameraOpen(false); }}><Upload size={16} /> Unggah gambar</button><button className={mode === "camera" ? "active" : ""} onClick={() => setMode("camera")}><Camera size={16} /> Gunakan kamera</button></div>
-            {mode === "upload" ? <label className="dropzone"><ImagePlus size={32} /><strong>Pilih gambar pisang</strong><span>JPG, PNG atau WEBP · maksimal 10MB</span><input type="file" accept="image/*" onChange={onFileChange} /></label> : <div className="camera-box">{cameraOpen ? <><video ref={videoRef} autoPlay playsInline muted /><button className="capture-button" onClick={capturePhoto}><Camera size={18} /> Ambil foto</button></> : <button className="camera-start" onClick={openCamera}><Camera size={25} /><strong>Buka kamera</strong><span>Izinkan akses kamera</span></button>}<canvas ref={canvasRef} hidden /></div>}
+            {mode === "upload" ? <label className="dropzone"><ImagePlus size={32} /><strong>Pilih gambar pisang</strong><span>Hanya format PNG · maksimal 10MB</span><input type="file" accept="image/png" onChange={onFileChange} /></label> : <div className="camera-box">{cameraOpen ? <><video ref={videoRef} autoPlay playsInline muted /><button className="capture-button" onClick={capturePhoto}><Camera size={18} /> Ambil foto</button></> : <button className="camera-start" onClick={openCamera}><Camera size={25} /><strong>Buka kamera</strong><span>Izinkan akses kamera</span></button>}<canvas ref={canvasRef} hidden /></div>}
             {preview && <div className="preview-wrap"><img src={preview} alt="Gambar pisang" /><span>Gambar siap dianalisis</span></div>}
             <button className="primary-button" disabled={!file || loading} onClick={predict}>{loading ? "Menganalisis..." : <><ScanLine size={18} /> Analisis kematangan <ChevronRight size={18} /></>}</button>
             {error && <p className="error-message">{error}</p>}
