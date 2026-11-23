@@ -23,7 +23,6 @@ reports/figures/*
 *.keras
 *.h5
 *.json
-!models/*.json
 !frontend/package.json
 !frontend/package-lock.json
 !frontend/tsconfig.json
