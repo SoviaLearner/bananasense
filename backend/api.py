@@ -29,10 +29,10 @@ app = FastAPI(title="BananaSense API", version="1.0.0")
 HF_REPO_ID = os.getenv("HF_REPO_ID", "")
 HF_TOKEN = os.getenv("HF_TOKEN") or None
 HF_MODEL_FILENAME = os.getenv("HF_MODEL_FILENAME", "bananasense.keras")
-FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
+FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:3001")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_ORIGIN, "http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=[FRONTEND_ORIGIN, "http://localhost:3001", "http://127.0.0.1:3001"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -91,7 +91,7 @@ def metrics():
         "confusion_matrix": read_huggingface_json(CONFUSION_MATRIX_PATH, "confusion_matrix.json", []),
         "train_counts": count_images(TRAIN_DIR),
         "test_counts": count_images(TEST_DIR),
-        "model_ready": MODEL_PATH.exists(),
+        "model_ready": MODEL_PATH.exists() or bool(HF_REPO_ID),
     }
 
 
