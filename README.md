@@ -72,12 +72,12 @@ npm install
 npm run dev
 ```
 
-Buka `http://localhost:3000`. Dashboard Next.js menerima gambar dari file atau kamera langsung. Output menampilkan prediksi, confidence setiap kelas, epoch terbaik, validation accuracy, test accuracy, grafik loss/accuracy, dan visualisasi gradient descent.
+Buka `http://localhost:3001`. Dashboard Next.js menerima gambar dari file atau kamera langsung. Output menampilkan prediksi, confidence setiap kelas, epoch terbaik, validation accuracy, test accuracy, grafik loss/accuracy, dan visualisasi gradient descent.
 
 ## Arsitektur aplikasi
 
 ```text
-Next.js frontend (port 3000)
+Next.js frontend (port 3001)
         │ upload / kamera
         ▼
 FastAPI backend (port 8017)
@@ -105,7 +105,7 @@ Model memperbarui bobot menggunakan rumus:
 1. Jalankan training sampai selesai dengan `python -m src.bananasense.train --epochs 30 --batch-size 32`.
 2. Pastikan `models/training_history.json` sudah terbentuk.
 3. Jalankan backend pada port unik `8017`.
-4. Jalankan frontend Next.js pada `http://localhost:3000`.
+4. Jalankan frontend Next.js pada `http://localhost:3001`.
 5. Buka bagian **Training intelligence → Gradient descent** untuk melihat formula update bobot, gradient norm awal/akhir, dan learning rate terakhir.
 6. Buka bagian **Model snapshot** untuk melihat test accuracy dan best epoch.
 
