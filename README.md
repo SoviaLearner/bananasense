@@ -112,3 +112,5 @@ Model memperbarui bobot menggunakan rumus:
 Nilai `best_epoch` adalah epoch dengan `val_accuracy` tertinggi. Model yang disimpan sudah memakai bobot terbaik karena training menggunakan early stopping dan `restore_best_weights=True`.
 
 Flowchart lengkap tersedia di `docs/flowchart-cnn.md`.
+
+Dokumentasi laporan proyek lengkap tersedia di `docs/laporan-proyek.md`, termasuk hasil training, grafik, best epoch, struktur CNN, cara menjalankan, pengujian API, dan deployment.
