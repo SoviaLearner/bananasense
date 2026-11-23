@@ -149,45 +149,45 @@ export default function Home() {
     <main className="page-shell">
       <nav className="topbar">
         <div className="brand"><div className="brand-mark">🍌</div><span>BananaSense</span></div>
-        <div className="system-status"><span className="online-dot" /> AI SYSTEM ONLINE</div>
+        <div className="system-status"><span className="online-dot" /> SISTEM AKTIF</div>
       </nav>
 
       <section className="hero-card">
-        <div className="hero-copy"><span className="eyebrow">SMART RIPENESS SCANNER</span><h1>Know your banana.<br /><em>Make it delicious.</em></h1><p>Scan a banana image and let our CNN model identify its ripeness in seconds.</p></div>
+        <div className="hero-copy"><span className="eyebrow">BANANASENSE</span><h1>Cek kematangan<br /><em>pisangmu.</em></h1><p>Unggah foto atau gunakan kamera untuk mendapatkan hasil klasifikasi kematangan pisang.</p></div>
         <div className="hero-banana">🍌</div>
         <div className="circuit circuit-one" /><div className="circuit circuit-two" />
       </section>
 
-      <section className="section-block"><div className="section-heading"><div><span className="eyebrow">OVERVIEW</span><h2>Model snapshot</h2></div><span className="live-pill"><Activity size={14} /> Live data</span></div>
+      <section className="section-block"><div className="section-heading"><div><span className="eyebrow">RINGKASAN</span><h2>Ringkasan model</h2></div><span className="live-pill"><Activity size={14} /> Data terbaru</span></div>
         <div className="metric-grid">
-          <MetricCard icon={<Database size={19} />} label="Training images" value={metrics ? String(Object.values(metrics.train_counts).reduce((sum, value) => sum + value, 0)) : "—"} accent="#b6e33b" />
-          <MetricCard icon={<Target size={19} />} label="Test accuracy" value={accuracy == null ? "—" : `${(accuracy * 100).toFixed(1)}%`} accent="#ffd21f" />
-          <MetricCard icon={<BrainCircuit size={19} />} label="Best epoch" value={metrics?.metrics?.best_epoch ? String(metrics.metrics.best_epoch) : "—"} accent="#b6e33b" />
-          <MetricCard icon={<ShieldCheck size={19} />} label="Model status" value={!modelReady ? "Offline" : accuracy && accuracy >= .85 ? "Good" : "Tune"} accent="#ffd21f" />
+          <MetricCard icon={<Database size={19} />} label="Gambar training" value={metrics ? String(Object.values(metrics.train_counts).reduce((sum, value) => sum + value, 0)) : "—"} accent="#b6e33b" />
+          <MetricCard icon={<Target size={19} />} label="Akurasi test" value={accuracy == null ? "—" : `${(accuracy * 100).toFixed(1)}%`} accent="#ffd21f" />
+          <MetricCard icon={<BrainCircuit size={19} />} label="Epoch terbaik" value={metrics?.metrics?.best_epoch ? String(metrics.metrics.best_epoch) : "—"} accent="#b6e33b" />
+          <MetricCard icon={<ShieldCheck size={19} />} label="Status model" value={!modelReady ? "Offline" : accuracy && accuracy >= .85 ? "Baik" : "Tuning"} accent="#ffd21f" />
         </div>
       </section>
 
-      <section className="section-block"><div className="section-heading"><div><span className="eyebrow">LIVE SCANNER</span><h2>Capture your banana</h2></div><span className="muted">Upload a photo or use your device camera.</span></div>
+      <section className="section-block"><div className="section-heading"><div><span className="eyebrow">PEMINDAIAN</span><h2>Masukkan gambar pisang</h2></div><span className="muted">Unggah foto atau gunakan kamera perangkat.</span></div>
         <div className="scanner-grid">
           <div className="surface-card scan-card">
-            <div className="input-tabs"><button className={mode === "upload" ? "active" : ""} onClick={() => { setMode("upload"); setCameraOpen(false); }}><Upload size={16} /> Upload image</button><button className={mode === "camera" ? "active" : ""} onClick={() => setMode("camera")}><Camera size={16} /> Use camera</button></div>
-            {mode === "upload" ? <label className="dropzone"><ImagePlus size={32} /><strong>Drop your image here</strong><span>JPG, PNG or WEBP · max 10MB</span><input type="file" accept="image/*" onChange={onFileChange} /></label> : <div className="camera-box">{cameraOpen ? <><video ref={videoRef} autoPlay playsInline muted /><button className="capture-button" onClick={capturePhoto}><Camera size={18} /> Capture photo</button></> : <button className="camera-start" onClick={openCamera}><Camera size={25} /><strong>Open camera</strong><span>Allow camera access to scan</span></button>}<canvas ref={canvasRef} hidden /></div>}
-            {preview && <div className="preview-wrap"><img src={preview} alt="Selected banana" /><span>Image ready to scan</span></div>}
-            <button className="primary-button" disabled={!file || loading} onClick={predict}>{loading ? "Analyzing..." : <><ScanLine size={18} /> Scan ripeness <ChevronRight size={18} /></>}</button>
+            <div className="input-tabs"><button className={mode === "upload" ? "active" : ""} onClick={() => { setMode("upload"); setCameraOpen(false); }}><Upload size={16} /> Unggah gambar</button><button className={mode === "camera" ? "active" : ""} onClick={() => setMode("camera")}><Camera size={16} /> Gunakan kamera</button></div>
+            {mode === "upload" ? <label className="dropzone"><ImagePlus size={32} /><strong>Pilih gambar pisang</strong><span>JPG, PNG atau WEBP · maksimal 10MB</span><input type="file" accept="image/*" onChange={onFileChange} /></label> : <div className="camera-box">{cameraOpen ? <><video ref={videoRef} autoPlay playsInline muted /><button className="capture-button" onClick={capturePhoto}><Camera size={18} /> Ambil foto</button></> : <button className="camera-start" onClick={openCamera}><Camera size={25} /><strong>Buka kamera</strong><span>Izinkan akses kamera</span></button>}<canvas ref={canvasRef} hidden /></div>}
+            {preview && <div className="preview-wrap"><img src={preview} alt="Gambar pisang" /><span>Gambar siap dianalisis</span></div>}
+            <button className="primary-button" disabled={!file || loading} onClick={predict}>{loading ? "Menganalisis..." : <><ScanLine size={18} /> Analisis kematangan <ChevronRight size={18} /></>}</button>
             {error && <p className="error-message">{error}</p>}
           </div>
           <div className="surface-card result-card">
-            <div className="result-heading"><div><span className="eyebrow">SCAN RESULT</span><h3>Your AI-powered insight</h3></div><Sparkles color="#ffd21f" size={22} /></div>
-            {result ? <><div className="result-highlight"><span>Predicted ripeness</span><strong>{labelName(result.label)}</strong><div className="confidence-row"><span>Confidence</span><b>{(result.probability * 100).toFixed(1)}%</b></div></div><div className="probability-list">{probabilities.map((item) => <div key={item.label} className="probability-item"><div><span>{labelName(item.label)}</span><b>{(item.probability * 100).toFixed(1)}%</b></div><div className="progress-track"><div style={{ width: `${item.probability * 100}%` }} /></div></div>)}</div></> : <div className="empty-result"><div className="empty-icon"><ScanLine size={30} /></div><strong>Ready when you are.</strong><span>Upload an image or open the camera to start.</span></div>}
+            <div className="result-heading"><div><span className="eyebrow">HASIL</span><h3>Hasil klasifikasi</h3></div><Sparkles color="#ffd21f" size={22} /></div>
+            {result ? <><div className="result-highlight"><span>Prediksi kematangan</span><strong>{labelName(result.label)}</strong><div className="confidence-row"><span>Tingkat keyakinan</span><b>{(result.probability * 100).toFixed(1)}%</b></div></div><div className="probability-list">{probabilities.map((item) => <div key={item.label} className="probability-item"><div><span>{labelName(item.label)}</span><b>{(item.probability * 100).toFixed(1)}%</b></div><div className="progress-track"><div style={{ width: `${item.probability * 100}%` }} /></div></div>)}</div></> : <div className="empty-result"><div className="empty-icon"><ScanLine size={30} /></div><strong>Siap digunakan</strong><span>Unggah gambar atau buka kamera untuk memulai.</span></div>}
           </div>
         </div>
       </section>
 
-      <section className="section-block"><div className="section-heading"><div><span className="eyebrow">MODEL INSIGHTS</span><h2>Training intelligence</h2></div><span className="muted">Best epoch: {metrics?.metrics?.best_epoch || "—"}</span></div>
-        <div className="insight-grid"><div className="surface-card chart-card"><div className="card-heading"><div><h3>Learning curve</h3><span>Loss across training epochs</span></div><span className="chart-legend"><i /> Train <i className="yellow" /> Validation</span></div><LineChart values={history.loss || []} secondary={history.val_loss} color="#b6e33b" /><div className="chart-caption">Training and validation loss should move down together.</div></div><div className="surface-card chart-card"><div className="card-heading"><div><h3>Gradient descent</h3><span>Gradient norm and learning rate</span></div><Activity size={18} color="#b6e33b" /></div><div className="formula">θₜ₊₁ = θₜ − η × ∇J(θₜ)</div><LineChart values={history.gradient_norm || []} color="#ffd21f" /><div className="descent-stats"><span>First gradient <b>{history.gradient_norm?.[0]?.toFixed(4) || "—"}</b></span><span>Final gradient <b>{history.gradient_norm?.at(-1)?.toFixed(4) || "—"}</b></span><span>Learning rate <b>{history.learning_rate?.at(-1)?.toExponential(2) || "—"}</b></span></div></div></div>
+      <section className="section-block"><div className="section-heading"><div><span className="eyebrow">PELATIHAN MODEL</span><h2>Grafik proses training</h2></div><span className="muted">Epoch terbaik: {metrics?.metrics?.best_epoch || "—"}</span></div>
+        <div className="insight-grid"><div className="surface-card chart-card"><div className="card-heading"><div><h3>Perubahan loss</h3><span>Loss pada setiap epoch</span></div><span className="chart-legend"><i /> Train <i className="yellow" /> Validasi</span></div><LineChart values={history.loss || []} secondary={history.val_loss} color="#b6e33b" /><div className="chart-caption">Loss train dan validasi idealnya turun bersama.</div></div><div className="surface-card chart-card"><div className="card-heading"><div><h3>Gradient descent</h3><span>Gradien dan learning rate</span></div><Activity size={18} color="#b6e33b" /></div><div className="formula">θ<sub>t+1</sub> = θ<sub>t</sub> − η × ∇J(θ<sub>t</sub>)</div><LineChart values={history.gradient_norm || []} color="#ffd21f" /><div className="descent-stats"><span>Gradien awal <b>{history.gradient_norm?.[0]?.toFixed(4) || "—"}</b></span><span>Gradien akhir <b>{history.gradient_norm?.at(-1)?.toFixed(4) || "—"}</b></span><span>Learning rate <b>{history.learning_rate?.at(-1)?.toExponential(2) || "—"}</b></span></div></div></div>
       </section>
 
-      <footer><div className="brand"><div className="brand-mark small">🍌</div><span>BananaSense</span></div><span>Computer vision for better bananas.</span></footer>
+      <footer><div className="brand"><div className="brand-mark small">🍌</div><span>BananaSense</span></div><span>Klasifikasi kematangan pisang berbasis citra.</span></footer>
     </main>
   );
 }
