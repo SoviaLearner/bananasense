@@ -46,13 +46,36 @@ Training akan menghasilkan:
 
 Sebanyak 20% citra dari `data/train/` otomatis digunakan sebagai validation selama training. Citra di `data/test/` hanya digunakan untuk evaluasi akhir agar hasil pengukuran tidak bocor.
 
-## Menjalankan dashboard
+## Menjalankan dashboard Next.js
+
+Terminal 1 — backend CNN:
 
 ```powershell
-streamlit run app/app.py
+uvicorn backend.api:app --reload --port 8000
 ```
 
-Dashboard menerima gambar dari file atau kamera langsung. Output menampilkan prediksi, confidence setiap kelas, epoch terbaik, validation accuracy, test accuracy, grafik loss/accuracy, distribusi data, confusion matrix, dan visualisasi gradient descent.
+Terminal 2 — frontend:
+
+```powershell
+cd frontend
+copy .env.example .env.local
+npm install
+npm run dev
+```
+
+Buka `http://localhost:3000`. Dashboard Next.js menerima gambar dari file atau kamera langsung. Output menampilkan prediksi, confidence setiap kelas, epoch terbaik, validation accuracy, test accuracy, grafik loss/accuracy, dan visualisasi gradient descent.
+
+## Arsitektur aplikasi
+
+```text
+Next.js frontend (port 3000)
+        │ upload / kamera
+        ▼
+FastAPI backend (port 8000)
+        │ load model .keras
+        ▼
+CNN BananaSense + metrics training
+```
 
 ## Arti gradient descent
 
