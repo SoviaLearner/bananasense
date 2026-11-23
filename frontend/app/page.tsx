@@ -16,7 +16,7 @@ import {
   Upload,
 } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8017";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8017";
 const defaultLabels = ["mentah", "setengah-matang", "matang", "terlalu-matang"];
 
 type MetricsResponse = {
@@ -46,20 +46,38 @@ function MetricCard({ icon, label, value, accent }: { icon: React.ReactNode; lab
   );
 }
 
-function LineChart({ values, secondary, color }: { values: number[]; secondary?: number[]; color: string }) {
+function LineChart({ values, secondary, color, yAxisLabel }: { values: number[]; secondary?: number[]; color: string; yAxisLabel: string }) {
   const allValues = [...values, ...(secondary || [])];
   if (!allValues.length) return <div className="empty-chart">Train model untuk melihat grafik.</div>;
   const max = Math.max(...allValues, 1);
   const min = Math.min(...allValues, 0);
   const range = max - min || 1;
+  const plotLeft = 48;
+  const plotRight = 610;
+  const plotTop = 20;
+  const plotBottom = 174;
+  const plotHeight = plotBottom - plotTop;
   const makePath = (series: number[]) => series.map((value, index) => {
-    const x = series.length === 1 ? 300 : (index / (series.length - 1)) * 580 + 10;
-    const y = 160 - ((value - min) / range) * 140;
+    const x = series.length === 1 ? (plotLeft + plotRight) / 2 : (index / (series.length - 1)) * (plotRight - plotLeft) + plotLeft;
+    const y = plotBottom - ((value - min) / range) * plotHeight;
     return `${index === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
   }).join(" ");
+  const formatTick = (value: number) => value >= 10 ? value.toFixed(0) : value.toFixed(2);
+  const middleValue = min + range / 2;
+  const lastEpoch = Math.max(values.length, secondary?.length || 0);
+  const middleEpoch = Math.max(1, Math.ceil(lastEpoch / 2));
   return (
-    <svg className="line-chart" viewBox="0 0 600 180" role="img" aria-label="Training chart">
-      <path d="M10 20H590 M10 90H590 M10 160H590" className="chart-grid" />
+    <svg className="line-chart" viewBox="0 0 640 220" role="img" aria-label={`${yAxisLabel} berdasarkan epoch`}>
+      <path d={`M${plotLeft} ${plotTop}H${plotRight} M${plotLeft} ${plotTop + plotHeight / 2}H${plotRight} M${plotLeft} ${plotBottom}H${plotRight}`} className="chart-grid" />
+      <path d={`M${plotLeft} ${plotTop}V${plotBottom}H${plotRight}`} className="chart-axis" />
+      <text x="40" y={plotTop + 4} className="chart-axis-label" textAnchor="end">{formatTick(max)}</text>
+      <text x="40" y={plotTop + plotHeight / 2 + 4} className="chart-axis-label" textAnchor="end">{formatTick(middleValue)}</text>
+      <text x="40" y={plotBottom + 4} className="chart-axis-label" textAnchor="end">{formatTick(min)}</text>
+      <text x="10" y="102" className="chart-axis-title" textAnchor="middle" transform="rotate(-90 10 102)">{yAxisLabel}</text>
+      <text x={plotLeft} y="194" className="chart-axis-label" textAnchor="middle">1</text>
+      <text x={(plotLeft + plotRight) / 2} y="194" className="chart-axis-label" textAnchor="middle">{middleEpoch}</text>
+      <text x={plotRight} y="194" className="chart-axis-label" textAnchor="middle">{lastEpoch}</text>
+      <text x={(plotLeft + plotRight) / 2} y="214" className="chart-axis-title" textAnchor="middle">Epoch</text>
       <path d={makePath(values)} fill="none" stroke={color} strokeWidth="4" strokeLinecap="round" />
       {secondary && <path d={makePath(secondary)} fill="none" stroke="#ffd21f" strokeWidth="3" strokeDasharray="7 7" strokeLinecap="round" />}
     </svg>
@@ -81,7 +99,14 @@ export default function Home() {
   const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/metrics`).then((response) => response.json()).then(setMetrics).catch(() => setError("Backend belum aktif. Jalankan FastAPI di port 8017."));
+    fetch(`${API_URL}/api/metrics`)
+      .then(async (response) => {
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.detail || "API tidak merespons.");
+        return payload;
+      })
+      .then(setMetrics)
+      .catch(() => setError(`Backend belum aktif. Pastikan FastAPI berjalan di ${API_URL}.`));
     return () => streamRef.current?.getTracks().forEach((track) => track.stop());
   }, []);
 
@@ -170,7 +195,7 @@ export default function Home() {
         <div className="scanner-grid">
           <div className="surface-card scan-card">
             <div className="input-tabs"><button className={mode === "upload" ? "active" : ""} onClick={() => { setMode("upload"); setCameraOpen(false); }}><Upload size={16} /> Unggah gambar</button><button className={mode === "camera" ? "active" : ""} onClick={() => setMode("camera")}><Camera size={16} /> Gunakan kamera</button></div>
-            {mode === "upload" ? <label className="dropzone"><ImagePlus size={32} /><strong>Pilih gambar pisang</strong><span>Hanya format PNG · maksimal 10MB</span><input type="file" accept="image/png" onChange={onFileChange} /></label> : <div className="camera-box">{cameraOpen ? <><video ref={videoRef} autoPlay playsInline muted /><button className="capture-button" onClick={capturePhoto}><Camera size={18} /> Ambil foto</button></> : <button className="camera-start" onClick={openCamera}><Camera size={25} /><strong>Buka kamera</strong><span>Izinkan akses kamera</span></button>}<canvas ref={canvasRef} hidden /></div>}
+            {mode === "upload" ? <label className="dropzone"><ImagePlus size={32} /><strong>Pilih gambar pisang</strong><span>PNG, JPG, atau JPEG · maksimal 10MB</span><input type="file" accept="image/png,image/jpg,image/jpeg" onChange={onFileChange} /></label> : <div className="camera-box">{cameraOpen ? <><video ref={videoRef} autoPlay playsInline muted /><button className="capture-button" onClick={capturePhoto}><Camera size={18} /> Ambil foto</button></> : <button className="camera-start" onClick={openCamera}><Camera size={25} /><strong>Buka kamera</strong><span>Izinkan akses kamera</span></button>}<canvas ref={canvasRef} hidden /></div>}
             {preview && <div className="preview-wrap"><img src={preview} alt="Gambar pisang" /><span>Gambar siap dianalisis</span></div>}
             <button className="primary-button" disabled={!file || loading} onClick={predict}>{loading ? "Menganalisis..." : <><ScanLine size={18} /> Analisis kematangan <ChevronRight size={18} /></>}</button>
             {error && <p className="error-message">{error}</p>}
@@ -183,7 +208,7 @@ export default function Home() {
       </section>
 
       <section className="section-block"><div className="section-heading"><div><span className="eyebrow">PELATIHAN MODEL</span><h2>Grafik proses training</h2></div><span className="muted">Epoch terbaik: {metrics?.metrics?.best_epoch || "—"}</span></div>
-        <div className="insight-grid"><div className="surface-card chart-card"><div className="card-heading"><div><h3>Perubahan loss</h3><span>Loss pada setiap epoch</span></div><span className="chart-legend"><i /> Train <i className="yellow" /> Validasi</span></div><LineChart values={history.loss || []} secondary={history.val_loss} color="#b6e33b" /><div className="chart-caption">Loss train dan validasi idealnya turun bersama.</div></div><div className="surface-card chart-card"><div className="card-heading"><div><h3>Gradient descent</h3><span>Gradien dan learning rate</span></div><Activity size={18} color="#b6e33b" /></div><div className="formula">θ<sub>t+1</sub> = θ<sub>t</sub> − η × ∇J(θ<sub>t</sub>)</div><LineChart values={history.gradient_norm || []} color="#ffd21f" /><div className="descent-stats"><span>Gradien awal <b>{history.gradient_norm?.[0]?.toFixed(4) || "—"}</b></span><span>Gradien akhir <b>{history.gradient_norm?.at(-1)?.toFixed(4) || "—"}</b></span><span>Learning rate <b>{history.learning_rate?.at(-1)?.toExponential(2) || "—"}</b></span></div></div></div>
+        <div className="insight-grid"><div className="surface-card chart-card"><div className="card-heading"><div><h3>Perubahan loss</h3><span>Loss pada setiap epoch</span></div><span className="chart-legend"><i /> Train <i className="yellow" /> Validasi</span></div><LineChart values={history.loss || []} secondary={history.val_loss} color="#b6e33b" yAxisLabel="Loss" /><div className="chart-caption">Loss menunjukkan kesalahan model. Semakin rendah dan stabil, semakin baik.</div></div><div className="surface-card chart-card"><div className="card-heading"><div><h3>Gradient descent</h3><span>Norma gradien pada setiap epoch</span></div><Activity size={18} color="#b6e33b" /></div><div className="formula">θ<sub>t+1</sub> = θ<sub>t</sub> − η × ∇J(θ<sub>t</sub>)</div><LineChart values={history.gradient_norm || []} color="#ffd21f" yAxisLabel="Norma gradien" /><div className="chart-caption">Grafik dapat naik-turun karena bobot diperbarui di setiap batch. Yang penting model tetap belajar dan akurasinya membaik.</div><div className="descent-stats"><span>Gradien awal <b>{history.gradient_norm?.[0]?.toFixed(4) || "—"}</b></span><span>Gradien akhir <b>{history.gradient_norm?.at(-1)?.toFixed(4) || "—"}</b></span><span>Learning rate <b>{history.learning_rate?.at(-1)?.toExponential(2) || "—"}</b></span></div></div></div>
       </section>
 
       <footer><div className="brand"><div className="brand-mark small">🍌</div><span>BananaSense</span></div><span>Klasifikasi kematangan pisang berbasis citra.</span></footer>
