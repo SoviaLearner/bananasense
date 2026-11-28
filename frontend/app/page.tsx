@@ -115,7 +115,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setSplash(false), 1400);
+    const timer = window.setTimeout(() => setSplash(false), 2200);
     return () => window.clearTimeout(timer);
   }, []);
 
