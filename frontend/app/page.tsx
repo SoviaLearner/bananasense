@@ -115,7 +115,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setSplash(false), 2200);
+    const timer = window.setTimeout(() => setSplash(false), 10000);
     return () => window.clearTimeout(timer);
   }, []);
 
@@ -179,7 +179,7 @@ export default function Home() {
   const modelReady = metrics?.model_ready;
   const history = metrics?.history || {};
 
-  if (splash) return <main className={`splash-screen ${dark ? "" : "user-light"}`}><div className="splash-mark">🍌</div><h1>BananaSense</h1><p>Scanner kematangan pisang</p><div className="splash-loader" /></main>;
+  if (splash) return <main className={"splash-screen " + (dark ? "" : "user-light")}><div className="splash-mark">BS</div><h1>BananaSense</h1><p>Scanner kematangan pisang</p><button className="splash-enter" onClick={() => setSplash(false)}>Mulai pemeriksaan</button><small>Atau tunggu sampai masuk otomatis</small><div className="splash-loader" /></main>;
 
   return (
     <main className={`page-shell ${dark ? "" : "user-light"}`}>
