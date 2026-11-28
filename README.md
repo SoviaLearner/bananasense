@@ -114,3 +114,5 @@ Nilai `best_epoch` adalah epoch dengan `val_accuracy` tertinggi. Model yang disi
 Flowchart lengkap tersedia di `docs/flowchart-cnn.md`.
 
 Dokumentasi laporan proyek lengkap tersedia di `docs/laporan-proyek.md`, termasuk hasil training, grafik, best epoch, struktur CNN, cara menjalankan, pengujian API, dan deployment.
+
+Frontend memiliki dua tampilan: `/` untuk User (splash, upload, kamera, prediksi) dan `/admin` untuk evaluasi model (classification report, MCC, confusion matrix, grafik training, serta gradient descent). Keduanya mendukung mode terang dan gelap.

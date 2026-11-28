@@ -14,6 +14,8 @@ import {
   Sparkles,
   Target,
   Upload,
+  Moon,
+  Sun,
 } from "lucide-react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8017";
@@ -94,6 +96,8 @@ export default function Home() {
   const [cameraOpen, setCameraOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [dark, setDark] = useState(true);
+  const [splash, setSplash] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -108,6 +112,11 @@ export default function Home() {
       .then(setMetrics)
       .catch(() => setError(`Backend belum aktif. Pastikan FastAPI berjalan di ${API_URL}.`));
     return () => streamRef.current?.getTracks().forEach((track) => track.stop());
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setSplash(false), 1400);
+    return () => window.clearTimeout(timer);
   }, []);
 
   const selectFile = (selectedFile: File | null) => {
@@ -170,9 +179,12 @@ export default function Home() {
   const modelReady = metrics?.model_ready;
   const history = metrics?.history || {};
 
+  if (splash) return <main className={`splash-screen ${dark ? "" : "user-light"}`}><div className="splash-mark">🍌</div><h1>BananaSense</h1><p>Scanner kematangan pisang</p><div className="splash-loader" /></main>;
+
   return (
-    <main className="page-shell">
+    <main className={`page-shell ${dark ? "" : "user-light"}`}>
       <nav className="topbar">
+        <div className="user-actions"><a href="/admin">Admin</a><button className="theme-button" onClick={() => setDark(!dark)}>{dark ? <Sun size={17} /> : <Moon size={17} />} {dark ? "Terang" : "Gelap"}</button></div>
         <div className="brand"><div className="brand-mark">🍌</div><span>BananaSense</span></div>
       </nav>
 

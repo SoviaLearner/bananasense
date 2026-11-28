@@ -171,6 +171,20 @@ Epoch 21 dipilih sebagai epoch terbaik karena menghasilkan `val_accuracy` tertin
 
 Kesalahan paling banyak terjadi pada kelas `matang` dan `terlalu-matang`, karena keduanya memiliki kemiripan warna dan bintik pada kulit pisang.
 
+### Matthews Correlation Coefficient (MCC)
+
+Evaluasi model juga menggunakan **MCC**. Untuk klasifikasi empat kelas, sistem menghitung MCC multiclass sebagai nilai macro keseluruhan dan MCC one-vs-rest untuk setiap kelas. MCC dipilih karena mempertimbangkan true positive, true negative, false positive, dan false negative sehingga lebih informatif ketika jumlah data antar kelas tidak sama.
+
+Interpretasi MCC:
+
+| Nilai | Interpretasi |
+|---:|---|
+| 1 | Prediksi sempurna |
+| 0 | Prediksi setara dengan tebakan acak |
+| -1 | Prediksi berlawanan dengan label aktual |
+
+Nilai MCC dan MCC per kelas tersimpan di `models/metrics.json` pada bagian `mcc`, lalu ditampilkan pada halaman Admin di route `/admin`.
+
 ## 8. Instalasi dan Menjalankan Training
 
 Buka PowerShell pada root project:
@@ -235,6 +249,13 @@ Buka dashboard:
 ```text
 http://localhost:3001
 ```
+
+### Dua tampilan frontend
+
+- `/` atau `http://localhost:3001`: halaman User dengan splash screen, upload gambar, kamera, prediksi, dan confidence.
+- `/admin` atau `http://localhost:3001/admin`: halaman Admin dengan dataset, classification report, MCC macro, MCC per kelas, confusion matrix, grafik loss, dan gradient descent.
+
+Kedua halaman memiliki tombol mode **Terang/Gelap**.
 
 Tes prediksi dari PowerShell:
 
